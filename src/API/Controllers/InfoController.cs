@@ -1,8 +1,9 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
-{ 
+{
     [ApiController]
     [Route("api/[controller]")]
     public class InfoController : ControllerBase
@@ -17,7 +18,12 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok();
+            _logger.LogInformation("Getting API Information");
+            return Ok(new
+            {
+                Application = "bill-tracker",
+                Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+            });
         }
     }
 }
