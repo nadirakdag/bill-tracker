@@ -1,9 +1,13 @@
+using System;
+using Datadog.Trace;
+using Datadog.Trace.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace API
 {
@@ -37,12 +41,19 @@ namespace API
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+            app.UseSerilogRequestLogging();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            
+            var settings = TracerSettings.FromDefaultSources();
+            settings.ServiceName = "bill-tracker";
+            settings.Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var tracer = new Tracer(settings);
+            Tracer.Instance = tracer;
         }
     }
 }
