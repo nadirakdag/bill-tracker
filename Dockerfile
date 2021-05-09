@@ -1,22 +1,19 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS base
-WORKDIR /app
-EXPOSE 80
-
 FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
 COPY ["src/API/API.csproj", "API/"]
 COPY ["src/Application/Application.csproj", "Application/"]
 COPY ["src/Domain/Domain.csproj", "Domain/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "Infrastructure/"]
-RUN dotnet restore "API/API.csproj"
+RUN dotnet restore "API/API.csproj"  --runtime alpine-x64
 COPY . .
 WORKDIR "src/API/"
-RUN dotnet build "API.csproj" -c Release -o /app/build
+RUN dotnet build "API.csproj" -c Release -o /app/build  --runtime alpine-x64
 
 FROM build AS publish
-RUN dotnet publish "API.csproj" -c Release -o /app/publish --no-restore --runtime alpine-x64 --self-contained true /p:PublishTrimmed=true /p:PublishSingleFile=true
+RUN dotnet publish "API.csproj" -c Release -o /app/publish --no-restore --runtime alpine-x64 /p:PublishTrimmed=true /p:PublishSingleFile=true
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/runtime-deps:5.0-alpine AS final
+EXPOSE 80
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "API.dll"]
+ENTRYPOINT ["./API", "--urls", "http://0.0.0.0:80"]
