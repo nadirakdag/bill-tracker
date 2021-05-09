@@ -15,7 +15,9 @@ It is developed with [Clean Architecture](https://github.com/jasontaylordev/Clea
 
 It uses MediatR, AutoMapper, EntityFrameworkCore with Postgresql.
 
+## Lessons Learned
 
+[How to Create Small and Secure Docker Container for .Net Applications](CREATE-SMALL-AND-SECURE-CONTAINERS.md)
 
 ## Run Locally
 
