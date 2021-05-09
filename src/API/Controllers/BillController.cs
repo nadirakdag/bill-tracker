@@ -90,7 +90,7 @@ namespace API.Controllers
                 _logger.LogInformation("Updated bill");
                 return NoContent();
             }
-            catch (BillNotFoundException e)
+            catch (BillNotFoundException)
             {
                 _logger.LogInformation("Bill not found");
                 return NotFound();
@@ -112,7 +112,7 @@ namespace API.Controllers
                 _logger.LogInformation("Bill deleted");
                 return NoContent();
             }
-            catch (BillNotFoundException e)
+            catch (BillNotFoundException)
             {
                 _logger.LogInformation("Bill not found");
                 return NotFound();
