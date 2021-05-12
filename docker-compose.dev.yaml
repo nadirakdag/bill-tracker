@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 networks:
     bill-tracker:
@@ -43,7 +43,8 @@ services:
         networks:
             - bill-tracker
         ports:
-            - "8126:8126"
+            - "8126:8126/tcp"
+            - "8125:8125/udp"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - /proc/:/host/proc/:ro
