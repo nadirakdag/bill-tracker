@@ -28,8 +28,15 @@ services:
         build: .
         environment:
             ASPNETCORE_ENVIRONMENT: production
+            DD_AGENT_HOST: datadog
+            DD_TRACE_AGENT_PORT: 8126
+            DatabaseConnection__UserName: postgres
+            DatabaseConnection__Password: mysecretpassword
+            DatabaseConnection__Host: postgres
+            DatabaseConnection__Port: 5432
+            DatabaseConnection__Database: BillTracker
         labels:
-            - "com.datadoghq.ad.logs='[{{\"service\": \"'bill-tracker'\"}}]'"
+            com.datadoghq.ad.logs: '[{"source": "csharp", "service": "bill-tracker"}]'
         ports:
             - "5000:80"
         networks:

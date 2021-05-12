@@ -1,5 +1,6 @@
 using System;
 using Application;
+using Application.Common.Models;
 using Datadog.Trace;
 using Datadog.Trace.Configuration;
 using Infrastructure;
@@ -24,9 +25,12 @@ namespace API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        { 
+            var databaseConnection = Configuration.GetSection(nameof(DatabaseConnection))
+                .Get<DatabaseConnection>();
+            
             services.AddApplication();
-            services.AddInfrastructure(Configuration);
+            services.AddInfrastructure(databaseConnection);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
