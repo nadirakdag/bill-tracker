@@ -1,0 +1,59 @@
+version: "3.9"
+
+networks:
+    bill-tracker:
+        name: bill-tracker-network
+
+services:
+    postgres:
+        image: postgres:13.2-alpine
+        networks:
+            - bill-tracker
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_PASSWORD: mysecretpassword
+            POSTGRES_USER: billTracker
+            POSTGRES_DB: BillTracker
+    
+    adminer:
+        image: adminer
+        networks:
+            - bill-tracker
+        ports:
+            - "8080:8080"
+        environment:
+            ADMINER_DEFAULT_SERVER: postgresql
+    
+    bill-tracker:
+        build: .
+        environment:
+            ASPNETCORE_ENVIRONMENT: production
+            DD_AGENT_HOST: datadog
+            DD_TRACE_AGENT_PORT: 8126
+        labels:
+            - "com.datadoghq.ad.logs='[{{\"service\": \"'bill-tracker'\"}}]'"
+        ports:
+            - "5000:80"
+        networks:
+            - bill-tracker
+
+    datadog:
+        image: datadog/agent:latest
+        networks:
+            - bill-tracker
+        ports:
+            - "8126:8126"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /proc/:/host/proc/:ro
+            - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+            - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+        environment:
+            - "DD_API_KEY=e9e9012050b0ebd3e609e0ad10e088e8"
+            - "DD_LOGS_ENABLED=true"
+            - "DD_APM_ENABLED=true"
+            - "DD_APM_NON_LOCAL_TRAFFIC=true"
+            - "DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true"
+            - "DD_AC_EXCLUDE=name:datadog"
+            - "DD_SITE=datadoghq.eu"
