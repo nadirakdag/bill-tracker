@@ -28,10 +28,10 @@ services:
         build: .
         environment:
             ASPNETCORE_ENVIRONMENT: production
-            # DD_AGENT_HOST: datadog
-            # DD_TRACE_AGENT_PORT: 8126
-        # labels:
-        #     - "com.datadoghq.ad.logs='[{{\"service\": \"'bill-tracker'\"}}]'"
+            DD_AGENT_HOST: datadog
+            DD_TRACE_AGENT_PORT: 8126
+        labels:
+            - "com.datadoghq.ad.logs='[{{\"service\": \"'bill-tracker'\"}}]'"
         ports:
             - "5000:80"
         networks:
