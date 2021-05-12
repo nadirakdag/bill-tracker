@@ -46,6 +46,7 @@ services:
             - "8125:8125/udp"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /var/lib/docker/containers:/var/lib/docker/containers:ro
             - /proc/:/host/proc/:ro
             - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
             - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
