@@ -17,4 +17,5 @@ EXPOSE 80
 ENV ASPNETCORE_ENVIRONMENT="production"
 WORKDIR /app
 COPY --from=publish /app/publish .
+HEALTHCHECK --interval=30s --timeout=60s --retries=3 CMD wget --no-verbose --tries=1 --spider http://localhost/health || exit
 ENTRYPOINT ["./API", "--urls", "http://0.0.0.0:80"]
