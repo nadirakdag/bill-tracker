@@ -29,6 +29,10 @@ namespace API
             var databaseConnection = Configuration.GetSection(nameof(DatabaseConnection))
                 .Get<DatabaseConnection>();
             
+            
+            services.AddHealthChecks()
+                .AddNpgSql(databaseConnection.ToString());
+            
             services.AddApplication();
             services.AddInfrastructure(databaseConnection);
             services.AddControllers();
@@ -56,6 +60,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
             
             var settings = TracerSettings.FromDefaultSources();
