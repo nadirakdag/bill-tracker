@@ -18,6 +18,7 @@ It uses MediatR, AutoMapper, EntityFrameworkCore with Postgresql.
 ## Lessons Learned
 
 [How to Create Small and Secure Docker Container for .Net Applications](CREATE-SMALL-AND-SECURE-CONTAINERS.md)
+[How to Create Docker Compose File](DOCKER-COMPOSE.md)
 
 ## Run Locally
 

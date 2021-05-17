@@ -14,6 +14,8 @@ RUN dotnet publish "API.csproj" -c Release -o /app/publish --no-restore --runtim
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:5.0-alpine AS final
 EXPOSE 80
+ENV ASPNETCORE_ENVIRONMENT="production"
 WORKDIR /app
 COPY --from=publish /app/publish .
+HEALTHCHECK --interval=30s --timeout=60s --retries=3 CMD wget --no-verbose --tries=1 --spider http://localhost/health || exit
 ENTRYPOINT ["./API", "--urls", "http://0.0.0.0:80"]

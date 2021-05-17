@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +23,9 @@ namespace API.Controllers
             return Ok(new
             {
                 Application = "bill-tracker",
-                Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+                Hostname = Environment.MachineName,
+                IPAddress = Dns.GetHostAddresses(Dns.GetHostName())[0].ToString()
             });
         }
     }
